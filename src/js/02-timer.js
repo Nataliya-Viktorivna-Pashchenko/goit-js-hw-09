@@ -5,6 +5,7 @@ import "notiflix/dist/notiflix-3.2.6.min.css";
 
 const pickerData = document.querySelector('#datetime-picker')
 const btnStart = document.querySelector('[data-start]')
+const timer = document.querySelector('.timer')
 
 const daysItem = document.querySelector('[data-days]');
 const hoursItem = document.querySelector('[data-hours]');
@@ -12,6 +13,7 @@ const minutesItem = document.querySelector('[data-minutes]');
 const secondsItem = document.querySelector('[data-seconds]');
 
 let intervalId;
+let userDate;
 
 
 btnStart.disabled = true;
@@ -25,15 +27,17 @@ const options = {
         if (selectedDates[0] <= options.defaultDate) {
             Notiflix.Notify.warning("Please choose a date in the future");
         } else {
-         console.log(selectedDates[0]);   
+          userDate = selectedDates[0];
+          console.log(selectedDates[0]); 
+            btnStart.disabled = false;
       }
-        btnStart.disabled = false;
+             
         return 
 
   },
 };
 
-let userDate = flatpickr(pickerData, options);
+flatpickr(pickerData, options);
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -59,19 +63,20 @@ function addLeadingZero(value) {
 };
 
 function onStart() {
+pickerData.disabled = true;
     intervalId = setInterval(() => {
-    const timeToEnd = userDate.selectedDates[0] - new Date();
-    if (timeToEnd > 0) {
-        
+      const timeToEnd = userDate - new Date();
+      
+      if (timeToEnd > 0) {
+
             const { days, hours, minutes, seconds } = convertMs(timeToEnd);
 
-            daysItem.textContent = `${days}`;
+            daysItem.textContent = addLeadingZero(`${days}`);
             hoursItem.textContent = addLeadingZero(`${hours}`);
             minutesItem.textContent = addLeadingZero(`${minutes}`);
             secondsItem.textContent = addLeadingZero(`${seconds}`);
 
            }
-        
         btnStart.disabled = true;
          }, 1000);
 }
