@@ -25,7 +25,7 @@ const options = {
   minuteIncrement: 1,
     onClose(selectedDates) { 
         if (selectedDates[0] <= options.defaultDate) {
-            Notiflix.Notify.warning("Please choose a date in the future");
+            Notiflix.Notify.warning("Please choose a date in the future.");
         } else {
           userDate = selectedDates[0];
           console.log(selectedDates[0]); 
